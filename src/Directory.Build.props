@@ -2,8 +2,8 @@
   <PropertyGroup>
     <VersionPrefix>2.1.0</VersionPrefix>
     <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
-    <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
     <Version Condition=" '$(Version)' == '' and '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+    <Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
   </PropertyGroup>
   <PropertyGroup>
     <Authors>Microcompiler</Authors>
