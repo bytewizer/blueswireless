@@ -5,7 +5,7 @@
 [![Build](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml/badge.svg)](https://github.com/bytewizer/blues/actions/workflows/actions.yml)
 
 
-## Notecarrier-AF with GHI Electronics FEZ Feather
+## Blues Wireless Notecarrier-AF with GHI Electronics FEZ Feather
 ![Notecard](/images/notecard.jpg)
 
 ## Requirements
@@ -18,7 +18,7 @@ If you like or are using this project to start your solution, please give it a s
 
 ## Getting Started
 
-We encourage users to play with the samples and test programs. See the working [Playground](https://github.com/bytewizer/blueswireless/tree/master/playground) for an example of how to use the packages. The [Tests](https://github.com/bytewizer/blueswireless/tree/master/tests) also includes many working examples.
+We encourage users to play with the samples and test programs. See the working [playground](https://github.com/bytewizer/blueswireless/tree/master/playground) for an example of how to use the packages. The [unit tests](https://github.com/bytewizer/blueswireless/tree/master/tests) also includes many working examples.
 
 ## Simple Example
 ```CSharp
