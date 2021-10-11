@@ -9,6 +9,7 @@
     <Authors>Microcompiler</Authors>
     <Company>Bytewizer Technology</Company>
     <PackageIcon>package-logo.png</PackageIcon>
+    <RepositoryUrl>https://github.com/bytewizer/blueswireless.git</RepositoryUrl>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageTags>ghi tinyclr tinyclros sitcore iot blues wireless</PackageTags>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

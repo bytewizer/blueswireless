@@ -63,7 +63,7 @@ class Program
 
 **main** :: This is the branch containing the latest release build. No contributions should be made directly to this branch. The development branch will periodically be merged to the main branch, and be released to [NuGet](https://www.nuget.org/packages?q=bytewizer.tinyclr).
 
-**develop** :: This is the development branch to which contributions should be proposed by contributors as pull requests. Development build packages are available as attached artifacts on successful build [workflows](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml).
+**develop** :: This is the development branch to which contributions should be proposed by contributors as pull requests. Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
 
 ## Contributions
 
