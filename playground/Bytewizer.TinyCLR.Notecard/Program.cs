@@ -17,14 +17,14 @@ namespace Bytewizer.TinyCLR.Notecard
             var notecard = new NotecardController(controller);
 
             // Set product id with json request (this only needs to be done once)
-            //var request1 = new JsonRequest("hub.set");
-            //request1.Add("product", "[your-product-uid]"); // replace your this with your project uid
+            var request1 = new JsonRequest("hub.set");
+            request1.Add("product", "[your-product-uid]"); // replace your this with your project uid
 
-            //var results1 = notecard.Request(request1);
-            //if (results1.IsSuccess)
-            //{
-            //    Debug.WriteLine(results1.Response);
-            //}
+            var results1 = notecard.Request(request1);
+            if (results1.IsSuccess)
+            {
+                Debug.WriteLine(results1.Response);
+            }
 
             // Create a json body object
             var body = new JsonObject();
