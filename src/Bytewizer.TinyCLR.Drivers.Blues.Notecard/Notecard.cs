@@ -15,7 +15,10 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
         const int POLLING_DELAY_MS = 25;
 
         private readonly I2cDevice i2cDevice;
-        private readonly byte[] emptyBuffer = new byte[] { 0x00, 0x00 };
+
+        private readonly byte[] emptyBuffer = new byte[2];
+        private readonly byte[] pollBuffer = new byte[2];
+
 
         public NotecardController(I2cController i2cController)
             : this(i2cController, new I2cConnectionSettings(I2C_ADDRESS) {
@@ -151,8 +154,8 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
         private void WaitForData(int timeout, out byte bytesAvailable) {
 
             var startTicks = DateTime.UtcNow.Ticks;
-            var buffer = new byte[2];
-
+            
+            pollBuffer[0] = 0;
             bytesAvailable = 0;
 
             do {
@@ -164,10 +167,10 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
                 Thread.Sleep(POLLING_DELAY_MS);
 
                 // Write an empty two byte buffer to poll for new data
-                this.i2cDevice.WriteRead(this.emptyBuffer, buffer);
+                this.i2cDevice.WriteRead(this.emptyBuffer, pollBuffer);
 
                 // The first byte in the buffer indicates the bytes available
-                bytesAvailable = buffer[0];
+                bytesAvailable = pollBuffer[0];
 
             } while (bytesAvailable == 0);
         }
