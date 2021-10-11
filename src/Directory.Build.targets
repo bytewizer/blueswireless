@@ -34,12 +34,4 @@
       <Compile Include="$(IntermediateOutputPath)CustomAssemblyInfo.cs" />
     </ItemGroup>
   </Target>
-  <Target Name="AfterBuild" Condition=" '$(GeneratePackageOnBuild)' == 'true' ">
-  <PropertyGroup>
-    <NuGetExePath Condition="'$(NuGetExePath)' == ''">$(MSBuildThisFileDirectory)nuget.exe</NuGetExePath>
-    <NuspecPath>$([System.IO.Path]::Combine($(BaseDir), "$(ProjectName).nuspec"))</NuspecPath>
-  </PropertyGroup>
-  <Exec WorkingDirectory="$(BaseDir)" 
-  Command="$(NuGetExePath) pack $(NuspecPath) -OutputDirectory $(PackageOutputPath) -Version $(Version) -Properties configuration=$(Configuration);id=$(AssemblyName)" />
-</Target>
 </Project>
