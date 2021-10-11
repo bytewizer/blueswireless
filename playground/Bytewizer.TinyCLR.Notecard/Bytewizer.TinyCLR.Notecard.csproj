@@ -43,12 +43,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard\Bytewizer.TinyCLR.Drivers.Blues.Notecard.csproj">
-      <Project>{0BB48E51-C07B-4B19-B860-BC853E69EADB}</Project>
-      <Name>Bytewizer.TinyCLR.Drivers.Blues.Notecard</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="Bytewizer.TinyCLR.Drivers.Blues.Notecard, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bytewizer.TinyCLR.Drivers.Blues.Notecard.2.1.0\lib\net452\Bytewizer.TinyCLR.Drivers.Blues.Notecard.dll</HintPath>
+    </Reference>
     <Reference Include="GHIElectronics.TinyCLR.Devices.Gpio, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.Gpio.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.Gpio.dll</HintPath>
     </Reference>
