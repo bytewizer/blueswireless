@@ -1,8 +1,8 @@
 # Blues Wireless for TinyCLR OS
 
 [![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr)
-[![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blues/actions/workflows/release.yml)
-[![Build](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml/badge.svg)](https://github.com/bytewizer/blues/actions/workflows/actions.yml)
+[![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml)
+[![Build](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml)
 
 
 ## Blues Wireless Notecarrier-AF with GHI Electronics FEZ Feather

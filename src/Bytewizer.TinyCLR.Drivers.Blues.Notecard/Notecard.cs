@@ -183,7 +183,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
             this.Response = response;
 
             if (string.IsNullOrEmpty(response)) {
-                this.Response = "{\"err\":\"null or empty response\"}";
+                this.Response = "{\"err\":\"null or empty response\"}\r\n";
                 return;
             }
 
@@ -199,17 +199,19 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
             this.IsSuccess = true;
         }
 
-        public string Response { get; private set; }
-
-        public bool IsSuccess { get; private set; }
-
-        public RequestResults EnsureSuccess() {
-            if (this.IsSuccess) {
+        public RequestResults EnsureSuccess()
+        {
+            if (this.IsSuccess)
+            {
                 return this;
             }
 
             throw new Exception(this.Response);
         }
+
+        public bool IsSuccess { get; private set; }
+
+        public string Response { get; private set; }
     }
 
     public class JsonRequest : JsonObject {
