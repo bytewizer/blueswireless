@@ -25,7 +25,7 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             Assert.True(results.IsSuccess);
         }
 
-        public void RequestWithBody()
+        public void RequestWithArguments()
         {
             var request = new JsonRequest("hub.log");
             request.Add("text", "something has gone wrong");
@@ -56,7 +56,7 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             Assert.True(results.IsSuccess);
         }
 
-        public void RequestWithBoolInt()
+        public void RequestWithBody()
         {
             var body = new JsonObject();
             body.Add("temp", 35.5);
@@ -69,7 +69,7 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             Assert.AreEqual(
                 request.ToJson(),
                 "{\"req\":\"note.add\",\"body\":{\"temp\":35.5,\"humid\":56.23},\"sync\":true}\n"
-                ); ;
+                );
 
             var results = _notecard.Request(request);
 

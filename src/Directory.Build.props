@@ -11,7 +11,6 @@
     <PackageIcon>package-logo.png</PackageIcon>
     <RepositoryUrl>https://github.com/bytewizer/blueswireless.git</RepositoryUrl>
     <PackageId>$(AssemblyName)</PackageId>
-    <PackageTags>ghi tinyclr tinyclros sitcore iot blues wireless</PackageTags>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>\builds\artifacts</PackageOutputPath>
@@ -21,6 +20,5 @@
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
     <None Include="..\..\images\package-logo.png" Pack="true" PackagePath="\" />
-    <None Include="README.md" />
   </ItemGroup>
 </Project>

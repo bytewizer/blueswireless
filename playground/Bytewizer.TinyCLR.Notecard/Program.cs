@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading;
 using System.Diagnostics;
 
 using Bytewizer.TinyCLR.Drivers.Blues.Notecard;
 
 using GHIElectronics.TinyCLR.Pins;
 using GHIElectronics.TinyCLR.Devices.I2c;
+using GHIElectronics.TinyCLR.Native;
 
 namespace Bytewizer.TinyCLR.Notecard
 {
@@ -12,36 +14,56 @@ namespace Bytewizer.TinyCLR.Notecard
     {
         static void Main()
         {
+            // replace your this with your project uid
+            var productUID = "com.bytewizer.trice:notepath";
+
             // Setup I2c bus for Fez Feather
-            var controller = I2cController.FromName(SC20100.I2cBus.I2c1);
+            var controller = I2cController.FromName(SC13048.I2cBus.I2c1);
             var notecard = new NotecardController(controller);
 
-            // Set product id with json request (this only needs to be done once)
-            var request1 = new JsonRequest("hub.set");
-            request1.Add("product", "[your-product-uid]"); // replace your this with your project uid
+            // Restore the notecard to default settings and deregister (this only needs to be done once)
+            var request = new JsonRequest("card.restore");
+            request.Add("delete", true);
 
-            var results1 = notecard.Request(request1);
-            if (results1.IsSuccess)
+            Debug.WriteLine(notecard.Request(request).Response);
+            Thread.Sleep(10000); // Wait 10 seconds for notecard to reload
+
+            // Set product id with json request 
+            request = new JsonRequest("hub.set");
+            request.Add("mode", "periodic");
+            request.Add("product", productUID);
+
+            var results = notecard.Request(request);
+            if (!results.IsSuccess)
             {
-                Debug.WriteLine(results1.Response);
+                throw new Exception("Faild to register product uid");
             }
 
-            // Create a json body object
+            // Enable card location module
+            request = new JsonRequest("card.location.mode");
+            request.Add("mode", "periodic");
+            request.Add("seconds", 3600);
+
+            Debug.WriteLine(notecard.Request(request).Response);
+
+            // Enable card location tracking
+            request = new JsonRequest("card.location.track");
+            request.Add("start", true);
+            request.Add("hours", 1);
+            request.Add("heartbeat", true);
+
+            Debug.WriteLine(notecard.Request(request).Response);
+
+            // Create a json message body and include with note
             var body = new JsonObject();
-            body.Add("temp", 35.5);
-            body.Add("humid", 56.23);
+            body.Add("manufacture", DeviceInformation.ManufacturerName);
+            body.Add("device", DeviceInformation.DeviceName);
 
-            // Set note with json request and included the body message
-            var request2 = new JsonRequest("note.add");
-            request2.Add("body", body);
-            request2.Add("sync", true);
+            request = new JsonRequest("note.add");
+            request.Add("body", body);
+            request.Add("sync", true);
 
-            var results2 = notecard.Request(request2);
-
-            if (results2.IsSuccess)
-            {
-                Debug.WriteLine(results2.Response);
-            }
+            Debug.WriteLine(notecard.Request(request).Response);
         }
     }
 }

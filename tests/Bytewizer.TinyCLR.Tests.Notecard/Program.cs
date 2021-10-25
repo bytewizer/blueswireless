@@ -10,7 +10,7 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
         {
             var testRunner = new TestRunner();
             testRunner.Run();
-            Debug.WriteLine(testRunner.Results());        
+            Debug.WriteLine(testRunner.Results());     
         }
     }
 }

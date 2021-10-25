@@ -5,20 +5,19 @@ using System.Collections;
 
 using GHIElectronics.TinyCLR.Devices.I2c;
 
-namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
-
+namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
+{
     public sealed class NotecardController : IDisposable {
 
         const int I2C_ADDRESS = 0x17;
         const int REQUEST_HEADER_LEN = 2;
         const int POLLING_TIMEOUT_MS = 2500;
-        const int POLLING_DELAY_MS = 25;
+        const int POLLING_DELAY_MS = 50;
 
         private readonly I2cDevice i2cDevice;
 
         private readonly byte[] emptyBuffer = new byte[2];
         private readonly byte[] pollBuffer = new byte[2];
-
 
         public NotecardController(I2cController i2cController)
             : this(i2cController, new I2cConnectionSettings(I2C_ADDRESS) {
@@ -55,10 +54,11 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
                 throw new ArgumentNullException(nameof(json));
             }
 
-            // Verify string ends with a newline character and if not add it
-            if (!json.EndsWith("\n")) {
-                json += "\n";
-            }
+            // Remove any whitespaces from request string
+            json = RemoveWhitespace(json);
+
+            // Add a newline character to end of string
+            json += "\n";
 
             // Encode request string
             var requestBytes = Encoding.UTF8.GetBytes(json);
@@ -79,6 +79,8 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
                 if (bytesAvailable < 4) {
                     break;
                 }
+
+                Thread.Sleep(250);
 
                 // Write a two byte buffer with the second byte as the number of bytes available
                 writeBuffer[1] = bytesAvailable;
@@ -103,7 +105,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
             }
 
             // Encode response string
-            var response = Encoding.UTF8.GetString(dataBuffer);
+            var response = Encoding.UTF8.GetString(dataBuffer,0, dataBuffer.Length);
 
             // Verify response string is valid json
             if (IsValidJson(response)) {
@@ -151,6 +153,25 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
             }
         }
 
+        private static string RemoveWhitespace(string json)
+        {
+            int j = 0;
+            char[] str = new char[json.Length];
+            
+            for (int i = 0; i < json.Length; ++i)
+            {
+                char tmp = json[i];
+
+                if (!tmp.IsWhiteSpace())
+                {
+                    str[j] = tmp;
+                    ++j;
+                }
+            }
+
+            return new string(str, 0, j);
+        }
+
         private void WaitForData(int timeout, out byte bytesAvailable) {
 
             var startTicks = DateTime.UtcNow.Ticks;
@@ -164,13 +185,13 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
                     return;
                 }
 
-                Thread.Sleep(POLLING_DELAY_MS);
-
                 // Write an empty two byte buffer to poll for new data
                 this.i2cDevice.WriteRead(this.emptyBuffer, pollBuffer);
 
                 // The first byte in the buffer indicates the bytes available
                 bytesAvailable = pollBuffer[0];
+
+                Thread.Sleep(POLLING_DELAY_MS);
 
             } while (bytesAvailable == 0);
         }
@@ -280,59 +301,40 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
 
         public virtual string ToJson() {
             var sb = new StringBuilder();
+            var count = this.NoteRequests.Count;
 
             sb.Append("{");
-            for (var i = 0; i < this.NoteRequests.Count; i++) {
+            for (var i = 0; i < count; i++) {
                 sb.Append(this.NoteRequests[i]);
-                if (i < this.NoteRequests.Count - 1) {
+                if (i < count - 1) {
                     sb.Append(",");
                 }
             }
             sb.Append("}");
 
             return sb.ToString().ToLower();
-        }
+        }      
     }
 
+    public static class StringExtensions
+    {
+        public static bool StartsWith(this string source, string value)
+            => source.ToLower().IndexOf(value.ToLower()) == 0;
 
-    //public sealed class NotecardLogger : IDisposable {
+        public static bool EndsWith(this string source, string value)
+            => source.ToLower().IndexOf(value.ToLower()) == source.Length - value.Length;
 
-    //    private readonly GpioController gpioController;
-    //    private readonly UartController uartController;
+        public static bool Contains(this string source, string value)
+            => source.ToLower().IndexOf(value.ToLower()) >= 0;
+    }
 
-    //    private readonly GpioPin enablePin;
-
-    //    public NotecardLogger(UartController uartController, int enablePin)
-    //        : this(uartController, new UartSetting() {
-    //            BaudRate = 115200,
-    //            DataBits = 8,
-    //            Parity = UartParity.None,
-    //            StopBits = UartStopBitCount.One,
-    //            Handshaking = UartHandshake.None
-    //        }, enablePin) {
-    //    }
-
-    //    public NotecardLogger(UartController uartController, UartSetting uartSettings, int enablePin) {
-
-    //        this.uartController = uartController;
-    //        this.uartController.SetActiveSettings(uartSettings);
-    //        this.uartController.Enable();
-
-    //        this.gpioController = GpioController.GetDefault();
-    //        this.enablePin = this.gpioController.OpenPin(enablePin);
-    //        this.enablePin.SetDriveMode(GpioPinDriveMode.Output);
-    //        this.enablePin.Write(GpioPinValue.High);
-    //    }
-
-    //    public void Enable() => this.enablePin.Write(GpioPinValue.High);
-
-    //    public void Disable() => this.enablePin.Write(GpioPinValue.Low);
-
-    //    public void Dispose() {
-    //        this.gpioController.Dispose();
-    //        this.uartController.Dispose();
-    //    }
-    //}
+    internal static class CharExtensions
+    {
+        internal static bool IsWhiteSpace(this char source)
+        {
+            return (source == ' ' || source == '\t' || source == '\n' || source == '\r' || source == '\v');
+        }
+    }
 
     internal static class I2cExtensions {
 
@@ -346,17 +348,5 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard {
 
             device.Write(buffer);
         }
-    }
-
-    internal static class StringExtensions {
-
-        internal static bool StartsWith(this string source, string value)
-            => source.ToLower().IndexOf(value.ToLower()) == 0;
-
-        internal static bool EndsWith(this string source, string value)
-            => source.ToLower().IndexOf(value.ToLower()) == source.Length - value.Length;
-
-        internal static bool Contains(this string source, string value)
-            => source.ToLower().IndexOf(value.ToLower()) >= 0;
     }
 }
