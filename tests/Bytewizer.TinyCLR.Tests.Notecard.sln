@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Drivers.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Tests.Notecard", "Bytewizer.TinyCLR.Tests.Notecard\Bytewizer.TinyCLR.Tests.Notecard.csproj", "{DA196475-ADAC-46B2-8440-30C000F7D5B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace", "..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace.csproj", "{0BB48E51-C07B-4B19-B860-AB853E69EADB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics", "..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics.csproj", "{0BB48E51-C07B-4B19-B860-AB853E69EADB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

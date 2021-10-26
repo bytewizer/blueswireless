@@ -1,6 +1,6 @@
 ﻿using Bytewizer.TinyCLR.Assertions;
 using Bytewizer.TinyCLR.Drivers.Blues.Notecard;
-using Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace;
+using Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics;
 
 using GHIElectronics.TinyCLR.Pins;
 using GHIElectronics.TinyCLR.Devices.I2c;

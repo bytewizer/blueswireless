@@ -7,8 +7,8 @@ using GHIElectronics.TinyCLR.Devices.I2c;
 
 namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 {
-    public sealed class NotecardController : IDisposable {
-
+    public sealed class NotecardController : IDisposable
+    {
         const int I2C_ADDRESS = 0x17;
         const int REQUEST_HEADER_LEN = 2;
         const int POLLING_TIMEOUT_MS = 2500;
@@ -19,18 +19,24 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         private readonly byte[] emptyBuffer = new byte[2];
         private readonly byte[] pollBuffer = new byte[2];
 
+        private readonly object requestLock = new object();
+
         public NotecardController(I2cController i2cController)
-            : this(i2cController, new I2cConnectionSettings(I2C_ADDRESS) {
+            : this(i2cController, new I2cConnectionSettings(I2C_ADDRESS)
+            {
                 BusSpeed = 100000,
                 AddressFormat = I2cAddressFormat.SevenBit
-            }) {
+            })
+        {
         }
 
-        public NotecardController(I2cController i2cController, I2cConnectionSettings i2cSettings) {
-            
+        public NotecardController(I2cController i2cController, I2cConnectionSettings i2cSettings)
+        {
+
             this.i2cDevice = i2cController.GetDevice(i2cSettings);
-            
-            try {
+
+            try
+            {
                 this.Reset();
             }
             catch (Exception ex)
@@ -48,107 +54,142 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         public string Transaction(JsonRequest request)
             => this.Transaction(request.ToJson());
 
-        public string Transaction(string json) {
+        public bool ValidateRequest { get; set; } = true;
 
-            if (string.IsNullOrEmpty(json)) {
-                throw new ArgumentNullException(nameof(json));
-            }
+        public string Transaction(string json)
+        {   
+            // Notecard doesn't support parallel request/responses
+            lock (requestLock)
+            {
 
-            // Remove any whitespaces from request string
-            json = RemoveWhitespace(json);
-
-            // Add a newline character to end of string
-            json += "\n";
-
-            // Encode request string
-            var requestBytes = Encoding.UTF8.GetBytes(json);
-
-            // Write request
-            this.i2cDevice.WriteJoinBytes(new byte[] { (byte)json.Length }, requestBytes);
-
-            // Create buffers
-            var dataBuffer = new byte[0];
-            var writeBuffer = new byte[2];
-
-            while (true) {
-
-                // Poll for request to be processed
-                this.WaitForData(POLLING_TIMEOUT_MS, out var bytesAvailable);
-
-                // The minimum bytes returned should be "{}\r\n"
-                if (bytesAvailable < 4) {
-                    break;
+                if (string.IsNullOrEmpty(json))
+                {
+                    throw new ArgumentNullException(nameof(json));
                 }
 
-                Thread.Sleep(250);
+                if (ValidateRequest)
+                {
+                    // Remove any whitespaces from request string
+                    json = RemoveWhitespace(json);
 
-                // Write a two byte buffer with the second byte as the number of bytes available
-                writeBuffer[1] = bytesAvailable;
-                var readBuffer = new byte[bytesAvailable + REQUEST_HEADER_LEN];
-                this.i2cDevice.WriteRead(writeBuffer, readBuffer);
-
-                // Check to make sure the second byte matches the number of bytes requested
-                if (bytesAvailable != readBuffer[1]) {
-                    throw new Exception("Unexpected i2c protocol byte count");
+                    if (!IsValidJson(json))
+                    {
+                        throw new InvalidOperationException("Invalid json request");
+                    }
                 }
 
-                // Resize and update data buffer
-                var newbuffer = new byte[dataBuffer.Length + readBuffer.Length - REQUEST_HEADER_LEN];
-                Array.Copy(dataBuffer, newbuffer, dataBuffer.Length);
-                Array.Copy(readBuffer, REQUEST_HEADER_LEN, newbuffer, dataBuffer.Length, readBuffer.Length - REQUEST_HEADER_LEN);
-                dataBuffer = newbuffer;
-
-                // Exit loop when \n (newline) is received as last byte
-                if (readBuffer[readBuffer.Length - 1] == 0x0A) {
-                    break;
+                // Verify string ends with a newline character and if not add it
+                if (!json.EndsWith("\n"))
+                {
+                    json += "\n";
                 }
-            }
 
-            // Encode response string
-            var response = Encoding.UTF8.GetString(dataBuffer,0, dataBuffer.Length);
+                // Encode request string
+                var requestBytes = Encoding.UTF8.GetBytes(json);
 
-            // Verify response string is valid json
-            if (IsValidJson(response)) {
-                return response;
-            }
-            else {
-                return null;
+                // Write request
+                this.i2cDevice.WriteJoinBytes(new byte[] { (byte)json.Length }, requestBytes);
+
+                // Create buffers
+                var dataBuffer = new byte[0];
+                var writeBuffer = new byte[2];
+
+                while (true)
+                {
+
+                    // Poll for request to be processed
+                    this.WaitForData(POLLING_TIMEOUT_MS, out var bytesAvailable);
+
+                    // The minimum bytes returned should be "{}\r\n"
+                    if (bytesAvailable < 4)
+                    {
+                        break;
+                    }
+
+                    // Write a two byte buffer with the second byte as the number of bytes available
+                    writeBuffer[1] = bytesAvailable;
+                    var readBuffer = new byte[bytesAvailable + REQUEST_HEADER_LEN];
+                    this.i2cDevice.WriteRead(writeBuffer, readBuffer);
+
+                    // Check to make sure the second byte matches the number of bytes requested
+                    if (bytesAvailable != readBuffer[1])
+                    {
+                        throw new Exception("Unexpected i2c protocol byte count");
+                    }
+
+                    // Resize and update data buffer
+                    var newbuffer = new byte[dataBuffer.Length + readBuffer.Length - REQUEST_HEADER_LEN];
+                    Array.Copy(dataBuffer, newbuffer, dataBuffer.Length);
+                    Array.Copy(readBuffer, REQUEST_HEADER_LEN, newbuffer, dataBuffer.Length, readBuffer.Length - REQUEST_HEADER_LEN);
+                    dataBuffer = newbuffer;
+
+                    // Exit loop when \n (newline) is received as last byte
+                    if (readBuffer[readBuffer.Length - 1] == 0x0A)
+                    {
+                        break;
+                    }
+                }
+
+                // Encode response string
+                var response = Encoding.UTF8.GetString(dataBuffer, 0, dataBuffer.Length);
+
+                // Verify response string is valid json
+                if (IsValidJson(response))
+                {
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
-        public void Reset() {
+        public void Reset()
+        {
+            // Notecard doesn't support parallel request/responses
+            lock (requestLock)
+            {
+                while (true)
+                {
+                    this.WaitForData(100, out var bytesAvailable);
 
-            while (true) {
+                    if (bytesAvailable > 0)
+                    {
+                        var buffer = new byte[bytesAvailable];
 
-                this.WaitForData(100, out var bytesAvailable);
-
-                if (bytesAvailable > 0) {
-                    var buffer = new byte[bytesAvailable];
-
-                    // Drain away any data left over in buffer
-                    this.i2cDevice.WriteRead(new byte[] { 0x00, bytesAvailable }, buffer);
-                }
-                else {
-                    break;
+                        // Drain away any data left over in buffer
+                        this.i2cDevice.WriteRead(new byte[] { 0x00, bytesAvailable }, buffer);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }
 
-        internal static bool IsError(string json) {
-            if (IsValidJson(json) && json.StartsWith("{\"err\":")) {
+        internal static bool IsError(string json)
+        {
+            if (IsValidJson(json) && json.StartsWith("{\"err\":"))
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
         }
 
-        internal static bool IsValidJson(string json) {
+        internal static bool IsValidJson(string json)
+        {
             if (json.StartsWith("{") && json.EndsWith("}\n")
-                || json.StartsWith("{") && json.EndsWith("}\r\n")) {
+                || json.StartsWith("{") && json.EndsWith("}\r\n"))
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
         }
@@ -157,31 +198,34 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         {
             int j = 0;
             char[] str = new char[json.Length];
-            
+
             for (int i = 0; i < json.Length; ++i)
             {
-                char tmp = json[i];
+                char temp = json[i];
 
-                if (!tmp.IsWhiteSpace())
+                if (!temp.IsWhiteSpace())
                 {
-                    str[j] = tmp;
+                    str[j] = temp;
                     ++j;
                 }
             }
 
-            return new string(str, 0, j);
+            return $"{new string(str, 0, j)}\n";
         }
 
-        private void WaitForData(int timeout, out byte bytesAvailable) {
+        private void WaitForData(int timeout, out byte bytesAvailable)
+        {
 
             var startTicks = DateTime.UtcNow.Ticks;
-            
+
             pollBuffer[0] = 0;
             bytesAvailable = 0;
 
-            do {
+            do
+            {
                 var elapsed = (DateTime.UtcNow.Ticks - startTicks) / TimeSpan.TicksPerMillisecond;
-                if (elapsed > timeout) {
+                if (elapsed > timeout)
+                {
                     return;
                 }
 
@@ -197,23 +241,28 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         }
     }
 
-    public class RequestResults {
+    public class RequestResults
+    {
 
-        public RequestResults(string response) {
+        public RequestResults(string response)
+        {
 
             this.Response = response;
 
-            if (string.IsNullOrEmpty(response)) {
+            if (string.IsNullOrEmpty(response))
+            {
                 this.Response = "{\"err\":\"null or empty response\"}\r\n";
                 return;
             }
 
-            if (response.Contains("{}\r\n")) {
+            if (response.Contains("{}\r\n"))
+            {
                 this.IsSuccess = true;
                 return;
             }
 
-            if (NotecardController.IsError(response)) {
+            if (NotecardController.IsError(response))
+            {
                 return;
             }
 
@@ -235,7 +284,8 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         public string Response { get; private set; }
     }
 
-    public class JsonRequest : JsonObject {
+    public class JsonRequest : JsonObject
+    {
 
         public JsonRequest(string req)
             => this.NoteRequests.Add($"\"req\":\"{req}\"");
@@ -247,7 +297,8 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             => $"{base.ToJson()}\n";
     }
 
-    public class JsonObject {
+    public class JsonObject
+    {
 
         protected readonly ArrayList NoteRequests = new ArrayList();
 
@@ -269,22 +320,27 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         public void Add(string argument, bool value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
-        public void Add(string argument, ArrayList value) {
+        public void Add(string argument, ArrayList value)
+        {
             var sb = new StringBuilder();
 
             sb.Append($"\"{argument}\":");
 
             sb.Append("[");
-            for (var i = 0; i < value.Count; i++) {
+            for (var i = 0; i < value.Count; i++)
+            {
 
-                if (value[i].GetType() == typeof(string)) {
+                if (value[i].GetType() == typeof(string))
+                {
                     sb.Append($"\"{value[i]}\"");
                 }
-                else {
+                else
+                {
                     sb.Append($"{value[i]}");
                 }
-                
-                if (i < value.Count - 1) {
+
+                if (i < value.Count - 1)
+                {
                     sb.Append(",");
                 }
             }
@@ -299,21 +355,24 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         public int Count
             => this.NoteRequests.Count;
 
-        public virtual string ToJson() {
+        public virtual string ToJson()
+        {
             var sb = new StringBuilder();
             var count = this.NoteRequests.Count;
 
             sb.Append("{");
-            for (var i = 0; i < count; i++) {
+            for (var i = 0; i < count; i++)
+            {
                 sb.Append(this.NoteRequests[i]);
-                if (i < count - 1) {
+                if (i < count - 1)
+                {
                     sb.Append(",");
                 }
             }
             sb.Append("}");
 
             return sb.ToString().ToLower();
-        }      
+        }
     }
 
     public static class StringExtensions
@@ -336,15 +395,14 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         }
     }
 
-    internal static class I2cExtensions {
+    internal static class I2cExtensions
+    {
+        internal static void WriteJoinBytes(this I2cDevice device, byte[] first, byte[] second)
+        {
+            var buffer = new byte[first.Length + second.Length];
 
-        internal static void WriteJoinBytes(this I2cDevice device, byte[] first, byte[] second) {
-            var firstLength = first.Length;
-            var secondLength = second.Length;
-            var buffer = new byte[firstLength + secondLength];
-
-            Array.Copy(first, buffer, firstLength);
-            Array.Copy(second, 0, buffer, firstLength, secondLength);
+            Array.Copy(first, buffer, first.Length);
+            Array.Copy(second, 0, buffer, first.Length, second.Length);
 
             device.Write(buffer);
         }

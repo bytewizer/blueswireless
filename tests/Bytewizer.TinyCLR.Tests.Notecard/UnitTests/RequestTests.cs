@@ -8,7 +8,8 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
 {
     public class RequestTests : NotecardFixture
     {
-        public RequestTests() : base() { }
+        public RequestTests() 
+            : base() { }
 
         public void RandomRequest()
         {

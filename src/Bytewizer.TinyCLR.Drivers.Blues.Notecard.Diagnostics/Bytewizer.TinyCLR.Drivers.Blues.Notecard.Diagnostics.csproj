@@ -7,8 +7,8 @@
     <ProjectGuid>{0BB48E51-C07B-4B19-B860-AB853E69EADB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace</RootNamespace>
-    <AssemblyName>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace</AssemblyName>
+    <RootNamespace>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics</RootNamespace>
+    <AssemblyName>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A1948822-69DD-4150-919B-F3F42EFB71CC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

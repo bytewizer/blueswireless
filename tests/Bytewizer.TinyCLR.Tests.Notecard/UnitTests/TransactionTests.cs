@@ -42,6 +42,14 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             StringAssert.Contains(response, "\"body\"");
         }
 
+        public void TransactionWithNewLine()
+        {
+            var request = "{\"req\":\"card.version\"}\n";
+            var response = _notecard.Transaction(request);
+
+            StringAssert.Contains(response, "\"body\"");
+        }
+
         public void TransactionWithEmptyResponse()
         {
             var request = "{\"req\":\"hub.sync\"}\r\n";

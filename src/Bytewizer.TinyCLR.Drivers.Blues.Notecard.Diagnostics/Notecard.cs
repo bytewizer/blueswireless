@@ -4,7 +4,7 @@ using System.Text;
 using GHIElectronics.TinyCLR.Devices.Uart;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 
-namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace
+namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
 {
     public sealed class NotecardLogger : IDisposable
     {
@@ -86,13 +86,6 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace
                 this.TempData += lines[0];
                 MessageAvailable?.Invoke(this.TempData.Trim());
                 this.TempData = lines[1];
-
-                //for (int i = 0; i < lines.Length; i++)
-                //{
-                //    this.TempData += lines[i];
-                //    MessageAvailable?.Invoke(this.TempData.Trim());
-                //    this.TempData = lines[i + 1];
-                //}
             }
         }
     }

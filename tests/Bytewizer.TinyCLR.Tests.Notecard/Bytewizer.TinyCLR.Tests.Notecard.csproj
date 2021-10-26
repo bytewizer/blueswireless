@@ -36,9 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ControllerExtensions.cs" />
+    <Compile Include="JsonResults.cs" />
+    <Compile Include="Models\CardWirelessRequest.cs" />
+    <Compile Include="Models\CardWirelessResponse.cs" />
     <Compile Include="NotecardFixture.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\JsonTests.cs" />
     <Compile Include="UnitTests\LoggerTests.cs" />
     <Compile Include="UnitTests\TransactionTests.cs" />
     <Compile Include="UnitTests\RequestTests.cs" />
@@ -53,6 +58,9 @@
     <Reference Include="Bytewizer.TinyCLR.Core, Version=2.1.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Core.2.1.5-preview.97\lib\net452\Bytewizer.TinyCLR.Core.dll</HintPath>
     </Reference>
+    <Reference Include="GHIElectronics.TinyCLR.Data.Json, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GHIElectronics.TinyCLR.Data.Json.2.1.0\lib\net452\GHIElectronics.TinyCLR.Data.Json.dll</HintPath>
+    </Reference>
     <Reference Include="GHIElectronics.TinyCLR.Devices.Gpio, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.Gpio.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.Gpio.dll</HintPath>
     </Reference>
@@ -62,6 +70,9 @@
     <Reference Include="GHIElectronics.TinyCLR.Devices.Uart, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.Uart.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.Uart.dll</HintPath>
     </Reference>
+    <Reference Include="GHIElectronics.TinyCLR.IO, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GHIElectronics.TinyCLR.IO.2.1.0\lib\net452\GHIElectronics.TinyCLR.IO.dll</HintPath>
+    </Reference>
     <Reference Include="GHIElectronics.TinyCLR.Native, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Native.2.1.0\lib\net452\GHIElectronics.TinyCLR.Native.dll</HintPath>
     </Reference>
@@ -70,9 +81,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace.csproj">
+    <ProjectReference Include="..\..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics\Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics.csproj">
       <Project>{0BB48E51-C07B-4B19-B860-AB853E69EADB}</Project>
-      <Name>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Trace</Name>
+      <Name>Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard\Bytewizer.TinyCLR.Drivers.Blues.Notecard.csproj">
       <Project>{0BB48E51-C07B-4B19-B860-BC853E69EADB}</Project>

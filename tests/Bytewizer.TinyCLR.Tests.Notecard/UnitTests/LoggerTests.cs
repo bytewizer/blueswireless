@@ -8,8 +8,8 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
 {
     public class LoggerTests : NotecardFixture
     {
-        public LoggerTests() 
-            : base() 
+        public LoggerTests()
+            : base()
         {
             _notecardLogger.MessageAvailable += NotecardLogger_DataReceived;
         }
