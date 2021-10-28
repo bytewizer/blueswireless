@@ -18,15 +18,15 @@ namespace Bytewizer.TinyCLR.Notecard
             var productUID = "com.bytewizer.trice:notepath";
 
             // Setup I2c bus for Fez Feather
-            var controller = I2cController.FromName(SC13048.I2cBus.I2c1);
+            var controller = I2cController.FromName(SC20100.I2cBus.I2c1);
             var notecard = new NotecardController(controller);
 
             // Restore the notecard to default settings and deregister (this only needs to be done once)
             var request = new JsonRequest("card.restore");
             request.Add("delete", true);
 
-            Debug.WriteLine(notecard.Request(request).Response);
-            Thread.Sleep(10000); // Wait 10 seconds for notecard to reload
+            //Debug.WriteLine(notecard.Request(request).Response);
+            //Thread.Sleep(10000); // Wait 10 seconds for notecard to reload
 
             // Set product id with json request 
             request = new JsonRequest("hub.set");

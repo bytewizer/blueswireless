@@ -56,6 +56,9 @@
     <Reference Include="Bytewizer.TinyCLR.Core, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Core.2.1.4\lib\net452\Bytewizer.TinyCLR.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Bytewizer.TinyCLR.Drivers.Blues.Notecard, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bytewizer.TinyCLR.Drivers.Blues.Notecard.2.1.1\lib\net452\Bytewizer.TinyCLR.Drivers.Blues.Notecard.dll</HintPath>
+    </Reference>
     <Reference Include="Bytewizer.TinyCLR.Http, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Http.2.1.4\lib\net452\Bytewizer.TinyCLR.Http.dll</HintPath>
     </Reference>
