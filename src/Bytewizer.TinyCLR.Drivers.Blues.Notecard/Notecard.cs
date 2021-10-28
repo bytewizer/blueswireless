@@ -11,7 +11,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
     {
         const int I2C_ADDRESS = 0x17;
         const int REQUEST_HEADER_LEN = 2;
-        const int POLLING_TIMEOUT_MS = 2500;
+        const int POLLING_TIMEOUT_MS = 5000;
         const int POLLING_DELAY_MS = 50;
 
         private readonly I2cDevice i2cDevice;
@@ -48,25 +48,27 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         public void Dispose()
             => this.i2cDevice.Dispose();
 
-        public RequestResults Request(JsonRequest noteRequest)
-            => new RequestResults(this.Transaction(noteRequest));
-
-        public string Transaction(JsonRequest request)
-            => this.Transaction(request.ToJson());
-
         public bool ValidateRequest { get; set; } = true;
 
+        public RequestResults Request(JsonRequest noteRequest)
+            => new RequestResults(this.Transaction(noteRequest));
+        
+        public RequestResults Request(string json)
+            => new RequestResults(this.Transaction(json));
+
+        public string Transaction(JsonRequest noteRequest)
+            => this.Transaction(noteRequest.ToJson());
+
         public string Transaction(string json)
-        {   
+        {
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new ArgumentNullException(nameof(json));
+            }
+
             // Notecard doesn't support parallel request/responses
             lock (requestLock)
             {
-
-                if (string.IsNullOrEmpty(json))
-                {
-                    throw new ArgumentNullException(nameof(json));
-                }
-
                 if (ValidateRequest)
                 {
                     // Remove any whitespaces from request string
@@ -210,7 +212,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 }
             }
 
-            return $"{new string(str, 0, j)}\n";
+            return $"{new string(str, 0, j).ToLower()}\n";
         }
 
         private void WaitForData(int timeout, out byte bytesAvailable)

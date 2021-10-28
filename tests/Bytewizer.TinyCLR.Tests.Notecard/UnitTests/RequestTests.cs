@@ -26,6 +26,14 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             Assert.True(results.IsSuccess);
         }
 
+        public void RandomRequestWithString()
+        {
+            var results = _notecard.Request("{\"req\":\"card.random\"}\n");
+
+            StringAssert.Contains(results.Response, "\"count\"");
+            Assert.True(results.IsSuccess);
+        }
+
         public void RequestWithArguments()
         {
             var request = new JsonRequest("hub.log");
