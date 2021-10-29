@@ -19,12 +19,12 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             if (_initialized)
                 return;
 
-            //var i2cController = I2cController.FromName(SC20100.I2cBus.I2c1); // Feather
-            var i2cController = I2cController.FromName(SC13048.I2cBus.I2c1); // Flea
+            var i2cController = I2cController.FromName(SC20100.I2cBus.I2c1); // Feather
+            //var i2cController = I2cController.FromName(SC13048.I2cBus.I2c1); // Flea
             _notecard = new NotecardController(i2cController);
 
-            var uartController = UartController.FromName(SC13048.UartPort.Uart4);
-            _notecardLogger = new NotecardLogger(uartController, SC13048.GpioPin.PA4);
+            //var uartController = UartController.FromName(SC13048.UartPort.Uart4);
+            //_notecardLogger = new NotecardLogger(uartController, SC13048.GpioPin.PA4);
 
             _initialized = true;
         }

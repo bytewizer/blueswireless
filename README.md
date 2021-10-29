@@ -9,13 +9,9 @@
 
 ![Notecard](/images/notecard.jpg)
 
-## Give a Star! :star:
-
-If you like or are using this project to start your solution, please give it a star. Thanks!
-
 ## Driver Libraries
 
-This repo contains two libraries built for working with Blues Wireless Notecards and TinyCLR OS.
+This repository contains libraries for working with [Blues Wireless Notecarrier-AF](https://blues.io) and TinyCLR OS.
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics">Diagnostics Logger</a> 
 
@@ -25,9 +21,11 @@ Install release package from [NuGet](https://www.nuget.org/packages?q=bytewizer.
 
 ## Requirements
 
-Hardware: [GHI Electronics FEZ Feather](https://www.digikey.com/short/jztbvf82) and [Blues Wireless Notecarrier-AF](https://blues.io)
-
 Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS 2.1</a> or higher.  
+
+## Give a Star! :star:
+
+If you like or are using this project to start your solution, please give it a star. Thanks!
 
 ## Getting Started
 
