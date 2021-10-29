@@ -6,7 +6,6 @@ using GHIElectronics.TinyCLR.Pins;
 using GHIElectronics.TinyCLR.Devices.Spi;
 using GHIElectronics.TinyCLR.Devices.Gpio;
 using GHIElectronics.TinyCLR.Devices.Network;
-using System.Net;
 
 namespace Bytewizer.TinyCLR.Notecard.Terminal
 {
@@ -72,7 +71,7 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
                 }
                 catch
                 {
-                    throw;
+                    throw new Exception("Networking failed verify ssid and password");
                 }
             }
         }

@@ -1,20 +1,33 @@
 # Blues Wireless for TinyCLR OS
 
-[![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr)
+[![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues)
 [![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml)
 [![Build](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/actions.yml)
 
 
 ## Blues Wireless Notecarrier-AF with GHI Electronics FEZ Feather
+
 ![Notecard](/images/notecard.jpg)
-
-## Requirements
-
-<a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS 2.1</a> or higher.  
 
 ## Give a Star! :star:
 
 If you like or are using this project to start your solution, please give it a star. Thanks!
+
+## Driver Libraries
+
+This repo contains two libraries built for working with Blues Wireless Notecards and TinyCLR OS.
+* <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard">Notecard Driver</a>
+* <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics">Diagnostics Logger</a> 
+
+## Nuget Packages
+
+Install release package from [NuGet](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues). Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
+
+## Requirements
+
+Hardware: [GHI Electronics FEZ Feather](https://www.digikey.com/short/jztbvf82) and [Blues Wireless Notecarrier-AF](https://blues.io)
+
+Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS 2.1</a> or higher.  
 
 ## Getting Started
 

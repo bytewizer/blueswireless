@@ -34,7 +34,6 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
             {
                 options.Pipeline(app =>
                 {
-                    app.UseCors();
                     app.UseRouting();
                     app.UseEndpoints(endpoints =>
                     {

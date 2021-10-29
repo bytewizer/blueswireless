@@ -1,24 +1,15 @@
+using System.Diagnostics;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 
 namespace Bytewizer.Notecard.Terminal.WebUI
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
-        {
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -29,16 +20,19 @@ namespace Bytewizer.Notecard.Terminal.WebUI
             app.UseFileServer();
 
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/data", async context =>
+                endpoints.MapGet("/request", async context =>
                 {
-                    var tom = context.Request.Query;
-                    
-                    var response = "{\"name\":\"value\"}";
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(response);
+                    var response = "{  \"hours\": 65,  \"mode\": \"usb\",  \"value\": 5.006489616652111,  \"vmin\": 3.579999999999999,  \"vmax\": 5.27,  \"vavg\": 4.965538461538461}";
+
+                    if (context.Request.Query.TryGetValue("request", out StringValues request))
+                    {
+                        Debug.WriteLine($"request: {request}");
+                        
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsync(response);
+                    }
                 });
             });
         }

@@ -62,9 +62,6 @@
     <Reference Include="Bytewizer.TinyCLR.Http, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Http.2.1.4\lib\net452\Bytewizer.TinyCLR.Http.dll</HintPath>
     </Reference>
-    <Reference Include="Bytewizer.TinyCLR.Http.Cors, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bytewizer.TinyCLR.Http.Cors.2.1.4\lib\net452\Bytewizer.TinyCLR.Http.Cors.dll</HintPath>
-    </Reference>
     <Reference Include="Bytewizer.TinyCLR.Logging.Abstractions, Version=2.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Logging.Abstractions.2.1.4\lib\net452\Bytewizer.TinyCLR.Logging.Abstractions.dll</HintPath>
     </Reference>
