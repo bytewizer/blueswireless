@@ -22,11 +22,12 @@ namespace Bytewizer.Notecard.Terminal.WebUI
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/request", async context =>
+                endpoints.MapPost("/request", async context =>
                 {
                     var response = "{  \"hours\": 65,  \"mode\": \"usb\",  \"value\": 5.006489616652111,  \"vmin\": 3.579999999999999,  \"vmax\": 5.27,  \"vavg\": 4.965538461538461}";
 
-                    if (context.Request.Query.TryGetValue("request", out StringValues request))
+                    var request = context.Request.Form["request"].ToString();
+                    if (!string.IsNullOrEmpty(request))
                     {
                         Debug.WriteLine($"request: {request}");
                         

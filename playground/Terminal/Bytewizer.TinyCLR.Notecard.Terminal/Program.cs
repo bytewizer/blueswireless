@@ -34,6 +34,7 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
             {
                 options.Pipeline(app =>
                 {
+                    app.UseCors();
                     app.UseRouting();
                     app.UseEndpoints(endpoints =>
                     {
@@ -64,33 +65,37 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
                         // Endpoint for getting request results
                         endpoints.Map("/request", context => 
                         {
-                            if (context.Request.Method != HttpMethods.Get)
+                            if (context.Request.Method != HttpMethods.Post)
                             {
                                 context.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
                                 return;
                             }
 
-                            if (context.Request.Query.TryGetValue("request", out string request))
+                            var query = context.Request.ReadFromUrlEncoded();
+                            if (query != null)
                             {
-                                context.Response.Headers.Add(HeaderNames.CacheControl, "no-cache");
-                                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-                                context.Response.ContentType = "application/json; charset=utf-8";
-
-                                try
+                                if (query.TryGetValue("request", out string request))
                                 {
-                                    // This is enable by default and removes whitespace and validates basic json
-                                    // message structure setting this to false will process the request exactly as provided 
-                                    //NotecardProvider.Controller.ValidateRequest = false;
+                                    context.Response.Headers.Add(HeaderNames.CacheControl, "no-cache");
+                                    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                                    context.Response.ContentType = "application/json; charset=utf-8";
 
-                                    var response = NotecardProvider.Controller.Transaction(request);
-                                    context.Response.Write(response);
-                                }
-                                catch (Exception ex)
-                                {
-                                    var jsonMessage = "{\"err\":\"" + ex.Message.ToLower() + "\"}";
-                                    context.Response.Write(jsonMessage);
+                                    try
+                                    {
+                                        // This is enable by default and removes whitespace and validates basic json
+                                        // message structure setting this to false will process the request exactly as provided 
+                                        //NotecardProvider.Controller.ValidateRequest = false;
 
-                                    NotecardProvider.Controller.Reset();
+                                        var response = NotecardProvider.Controller.Transaction(request);
+                                        context.Response.Write(response);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        var jsonMessage = "{\"err\":\"" + ex.Message.ToLower() + "\"}";
+                                        context.Response.Write(jsonMessage);
+
+                                        NotecardProvider.Controller.Reset();
+                                    }
                                 }
                             }
                         });

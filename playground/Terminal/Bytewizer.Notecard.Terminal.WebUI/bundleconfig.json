@@ -1,0 +1,8 @@
+[
+    {
+        "outputFileName": "wwwroot/index.min.html",
+        "inputFiles": [
+            "wwwroot/index.html"
+        ]
+    }
+]

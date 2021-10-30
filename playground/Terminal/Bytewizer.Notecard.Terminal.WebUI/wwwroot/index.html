@@ -135,7 +135,7 @@
     </div><!-- .content-wrapper -->
     <script>
         {
-            let endpointUrl = "/request?";
+            let endpointUrl = "/request";
 
             formSubmit.onsubmit = async (e) => {
                 e.preventDefault();
@@ -148,7 +148,14 @@
                     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
                     .join('&');
 
-                fetch(endpointUrl + query).then(function (response) {
+                fetch(endpointUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: query
+                }).then(function (response) {
                     response.json().then(function (json) {
                         document.getElementById("results").innerHTML = "<pre><code class= \"code-results\">" + JSON.stringify(json, "undefined", 2) + "</code></pre>"
                     });
