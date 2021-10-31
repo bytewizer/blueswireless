@@ -6,12 +6,20 @@ using GHIElectronics.TinyCLR.Devices.Gpio;
 
 namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
 {
+    /// <summary>
+    /// Configures the <see cref="NotecardLogger"/> to use the serial interface for communication with the host.
+    /// </summary>
     public sealed class NotecardLogger : IDisposable
     {
         private readonly GpioPin enablePin;
         private readonly UartController uartController;
         private readonly GpioController gpioController;
 
+        /// <summary>
+        /// Initializes a default instance of the <see cref="NotecardLogger"/> class.
+        /// </summary>
+        /// <param name="uartController">The uart controller to use.</param>
+        /// <param name="enablePin">The gpio pin to use enable the serial interface.</param>
         public NotecardLogger(UartController uartController, int enablePin)
             : this(uartController, new UartSetting()
             {
@@ -21,9 +29,14 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
                 StopBits = UartStopBitCount.One,
                 Handshaking = UartHandshake.None
             }, enablePin)
-        {
-        }
+        { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotecardLogger"/> class.
+        /// </summary>
+        /// <param name="uartController">The uart controller to use.</param>
+        /// <param name="uartSettings">The uart controller settings to use.</param>
+        /// <param name="enablePin">The gpio pin to use enable the serial interface.</param>
         public NotecardLogger(UartController uartController, UartSetting uartSettings, int enablePin)
         {
             this.uartController = uartController;
@@ -38,10 +51,19 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
             this.enablePin.Write(GpioPinValue.High);
         }
 
+        /// <summary>
+        /// Enable the notecard debug interface.
+        /// </summary>
         public void Enable() => this.enablePin.Write(GpioPinValue.High);
 
+        /// <summary>
+        /// Disable the notecard debug interface.
+        /// </summary>
         public void Disable() => this.enablePin.Write(GpioPinValue.Low);
 
+        /// <summary>
+        /// Enable debug message logging.
+        /// </summary>
         public void TraceOn()
         {
             Enable();
@@ -50,6 +72,9 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
             this.uartController.Write(writeBuffer);
         }
 
+        /// <summary>
+        /// Disable degug message logging.
+        /// </summary>
         public void TraceOff()
         {
             var writeBuffer = Encoding.UTF8.GetBytes("{\"req\":\"card.trace\",\"mode\":\"off\"}\n");
@@ -58,6 +83,9 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
             Disable();
         }
 
+        /// <summary>
+        /// Pro-actively frees resources owned by this instance.
+        /// </summary>
         public void Dispose()
         {
             this.enablePin.Dispose();
@@ -65,7 +93,16 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics
             this.gpioController.Dispose();
         }
 
+
+        /// <summary>
+        /// An event that is raised when a message is available.
+        /// </summary>
         public event MessageAvailableEventHandler MessageAvailable;
+
+
+        /// <summary>
+        /// An event that is raised when a message is available.
+        /// </summary>
         public delegate void MessageAvailableEventHandler(string message);
 
         private string TempData { set; get; } = string.Empty;
