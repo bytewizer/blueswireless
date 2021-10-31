@@ -16,6 +16,17 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
 
         public static NetworkController Controller { get; private set; }
 
+        public static void Initialize()
+        {
+            SettingsProvider.Initialize();
+
+            Initialize(
+                SettingsProvider.Flash.Ssid,
+                SettingsProvider.Flash.Password,
+                SettingsProvider.Flash.Mode
+                );
+        }
+
         public static void Initialize(string ssid, string password, WiFiMode mode = WiFiMode.Station)
         {
             if (_initialized)
@@ -74,6 +85,15 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
                     throw new Exception("Networking failed verify ssid and password");
                 }
             }
+        }
+
+        public static void Set(string ssid, string password, WiFiMode mode)
+        {
+            SettingsProvider.Initialize();
+            SettingsProvider.Flash.Ssid = ssid;
+            SettingsProvider.Flash.Password = password;
+            SettingsProvider.Flash.Mode = mode;
+            SettingsProvider.Write();
         }
 
         public static string Info(NetworkController controller)

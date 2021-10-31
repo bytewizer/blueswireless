@@ -14,11 +14,14 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
 
         static void Main()
         {
-            // Initialize wireless connection using a wifi network
-            NetworkProvider.Initialize("ssid", "password"); // Set your wifi credentials
+            // Write your wifi credentials to on chipset flash.  This only needs to be run once. 
+            //NetworkProvider.Set("ssid", "password", WiFiMode.Station);
 
-            // Initialize a direct one to one connection with to the notecard
-            //NetworkProvider.Initialize("blues-wireless", "", WiFiMode.AccessPoint); // Set an empty password for a open network
+            // Write a direct one to one connection to on chipset flash. This only needs to be run once.
+            //NetworkProvider.Set("mynotecard", "", WiFiMode.AccessPoint); // Set an empty password for an open network
+
+            // Initialize wireless connection using flash configuration
+            NetworkProvider.Initialize(); 
             NetworkProvider.Controller.NetworkAddressChanged += NetworkAddressChanged;
 
             // Initialize Blues Wireless Notecard

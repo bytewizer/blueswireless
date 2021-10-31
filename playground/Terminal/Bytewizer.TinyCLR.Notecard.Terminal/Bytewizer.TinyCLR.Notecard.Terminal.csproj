@@ -41,10 +41,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Providers\FlashObject.cs" />
     <Compile Include="Providers\NotecardProvider.cs" />
     <Compile Include="Providers\NetworkProvider.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\SettingsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -55,6 +57,9 @@
   <ItemGroup>
     <Reference Include="Bytewizer.TinyCLR.Core, Version=2.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Core.2.1.6\lib\net452\Bytewizer.TinyCLR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Bytewizer.TinyCLR.Drivers.Blues.Notecard, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bytewizer.TinyCLR.Drivers.Blues.Notecard.2.1.2\lib\net452\Bytewizer.TinyCLR.Drivers.Blues.Notecard.dll</HintPath>
     </Reference>
     <Reference Include="Bytewizer.TinyCLR.Http, Version=2.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Bytewizer.TinyCLR.Http.2.1.6\lib\net452\Bytewizer.TinyCLR.Http.dll</HintPath>
@@ -80,6 +85,9 @@
     <Reference Include="GHIElectronics.TinyCLR.Devices.Network, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.Network.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.Network.dll</HintPath>
     </Reference>
+    <Reference Include="GHIElectronics.TinyCLR.Devices.SecureStorage, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.SecureStorage.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.SecureStorage.dll</HintPath>
+    </Reference>
     <Reference Include="GHIElectronics.TinyCLR.Devices.Spi, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\GHIElectronics.TinyCLR.Devices.Spi.2.1.0\lib\net452\GHIElectronics.TinyCLR.Devices.Spi.dll</HintPath>
     </Reference>
@@ -104,12 +112,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Bytewizer.TinyCLR.Drivers.Blues.Notecard\Bytewizer.TinyCLR.Drivers.Blues.Notecard.csproj">
-      <Project>{0BB48E51-C07B-4B19-B860-BC853E69EADB}</Project>
-      <Name>Bytewizer.TinyCLR.Drivers.Blues.Notecard</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
