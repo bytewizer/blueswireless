@@ -86,8 +86,8 @@ namespace Bytewizer.TinyCLR.Notecard.Terminal
                                         // message structure setting this to false will process the request exactly as provided 
                                         //NotecardProvider.Controller.ValidateRequest = false;
 
-                                        var response = NotecardProvider.Controller.Transaction(request);
-                                        context.Response.Write(response);
+                                        var results = NotecardProvider.Controller.Request(request);
+                                        context.Response.Write(results.Response);
                                     }
                                     catch (Exception ex)
                                     {

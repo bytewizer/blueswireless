@@ -6,6 +6,7 @@ on:
     - develop
     paths: 
       - '**'
+      - '!playground/*'
       - '!.editorconfig'
       - '!.gitattributes'
       - '!.gitignore'

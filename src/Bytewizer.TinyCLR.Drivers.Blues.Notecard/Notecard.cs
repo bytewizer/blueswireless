@@ -4,12 +4,17 @@ using System.Threading;
 using System.Collections;
 
 using GHIElectronics.TinyCLR.Devices.I2c;
+using System.Diagnostics;
 
 namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 {
+    /// <summary>
+    /// Configures the <see cref="NotecardController"/> to use the I2C bus for communication with the host.
+    /// </summary>
     public sealed class NotecardController : IDisposable
     {
         const int I2C_ADDRESS = 0x17;
+        const int I2C_DELAY_MS = 1;
         const int REQUEST_HEADER_LEN = 2;
         const int POLLING_TIMEOUT_MS = 5000;
         const int POLLING_DELAY_MS = 50;
@@ -21,6 +26,11 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
         private readonly object requestLock = new object();
 
+
+        /// <summary>
+        /// Initializes a default instance of the <see cref="NotecardController"/> class.
+        /// </summary>
+        /// <param name="i2cController">The i2c controller to use.</param>
         public NotecardController(I2cController i2cController)
             : this(i2cController, new I2cConnectionSettings(I2C_ADDRESS)
             {
@@ -30,6 +40,11 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotecardController"/> class.
+        /// </summary>
+        /// <param name="i2cController">The i2c controller to use.</param>
+        /// <param name="i2cSettings">The i2c controller settings to use.</param>
         public NotecardController(I2cController i2cController, I2cConnectionSettings i2cSettings)
         {
 
@@ -45,20 +60,47 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             }
         }
 
+        /// <summary>
+        /// Pro-actively frees resources owned by this instance.
+        /// </summary>
         public void Dispose()
             => this.i2cDevice.Dispose();
 
+        /// <summary>
+        /// Validate request removing whitespace and checking for starting and ending brackets.
+        /// Thows <see cref="InvalidOperationException"/> if validation fails.
+        /// </summary>
         public bool ValidateRequest { get; set; } = true;
 
+        /// <summary>
+        /// Sends a request for processing on the notecard.
+        /// </summary>
+        /// <param name="noteRequest">A <see cref=" JsonRequest"/> request.</param>
+        /// <returns>A <see cref="RequestResults"/> populated with the request response.</returns>
         public RequestResults Request(JsonRequest noteRequest)
             => new RequestResults(this.Transaction(noteRequest));
-        
+
+        /// <summary>
+        /// Sends a request for processing on the notecard.
+        /// </summary>
+        /// <param name="json">A <see cref="string"/> request formated as json.</param>
+        /// <returns>A <see cref="RequestResults"/> populated with the request response.</returns>
         public RequestResults Request(string json)
             => new RequestResults(this.Transaction(json));
 
+        /// <summary>
+        /// Sends a transaction request for processing on the notecard.
+        /// </summary>
+        /// <param name="noteRequest">A <see cref=" JsonRequest"/> request.</param>
+        /// <returns>A <see cref="string"/> populated with the json response.</returns>
         public string Transaction(JsonRequest noteRequest)
             => this.Transaction(noteRequest.ToJson());
 
+        /// <summary>
+        /// Sends a transaction request for processing on the notecard.
+        /// </summary>
+        /// <param name="json">A <see cref="string"/> request formated as json.</param>
+        /// <returns>A <see cref="string"/> populated with the json response.</returns>
         public string Transaction(string json)
         {
             if (string.IsNullOrEmpty(json))
@@ -92,13 +134,15 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 // Write request
                 this.i2cDevice.WriteJoinBytes(new byte[] { (byte)json.Length }, requestBytes);
 
+                // Notecard i2c commands can not be received more quickly then 1 ms appart.
+                Thread.Sleep(I2C_DELAY_MS);
+
                 // Create buffers
                 var dataBuffer = new byte[0];
                 var writeBuffer = new byte[2];
 
                 while (true)
                 {
-
                     // Poll for request to be processed
                     this.WaitForData(POLLING_TIMEOUT_MS, out var bytesAvailable);
 
@@ -147,6 +191,9 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             }
         }
 
+        /// <summary>
+        /// Resets the I2C port by draining away any left over data in the buffer.
+        /// </summary>
         public void Reset()
         {
             // Notecard doesn't support parallel request/responses
@@ -243,12 +290,18 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         }
     }
 
+    /// <summary>
+    ///  Represents a response from the notecard.
+    /// </summary>
+    [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class RequestResults
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestResults" /> class.
+        /// </summary>
+        /// <param name="response">The json response message.</param>
         public RequestResults(string response)
         {
-
             this.Response = response;
 
             if (string.IsNullOrEmpty(response))
@@ -271,6 +324,9 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             this.IsSuccess = true;
         }
 
+        /// <summary>
+        /// Throws an exception if the <see cref="IsSuccess"/> property for the json response is <c>false</c>"/>.
+        /// </summary>
         public RequestResults EnsureSuccess()
         {
             if (this.IsSuccess)
@@ -281,47 +337,114 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             throw new Exception(this.Response);
         }
 
+        /// <summary>
+        /// A value that indicates if the notcard response was successful.
+        /// </summary>
         public bool IsSuccess { get; private set; }
 
+        /// <summary>
+        /// Gets the json response message.
+        /// </summary>
+        /// <value>The json response message.</value>
         public string Response { get; private set; }
+
+        ///	<summary>
+        ///	Debugger display for this object.
+        ///	</summary>
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string DebuggerDisplay
+        {
+            get { return $"{{{nameof(IsSuccess)}: {Response}}}";}
+        }
     }
 
+    /// <summary>
+    ///  Represents a notecard command request.
+    /// </summary>
     public class JsonRequest : JsonObject
     {
-
+        /// <summary>
+        /// Creates a new command object for processing on the notecard.
+        /// </summary>
+        /// <param name="req">The command name (i.e. 'note.add').</param>
         public JsonRequest(string req)
             => this.NoteRequests.Add($"\"req\":\"{req}\"");
 
+        /// <summary>
+        /// Adds a command argument to <see cref="JsonRequest"/> object.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, JsonObject value)
             => this.NoteRequests.Add($"\"{argument}\":{value.ToJson()}");
 
+        /// <summary>
+        /// Returns a <see cref="string"/> that represents the <see cref="JsonRequest"/> object.
+        /// </summary>
         public override string ToJson()
             => $"{base.ToJson()}\n";
     }
 
+    /// <summary>
+    ///  Represents a notecard json request object.
+    /// </summary>
     public class JsonObject
     {
-
         protected readonly ArrayList NoteRequests = new ArrayList();
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, string value)
             => this.NoteRequests.Add($"\"{argument}\":\"{value}\"");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, int value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, long value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, float value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, double value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, bool value)
             => this.NoteRequests.Add($"\"{argument}\":{value}");
 
+        /// <summary>
+        /// Adds an argument and value to the <see cref="JsonObject"/>.
+        /// </summary>
+        /// <param name="argument">The argument name.</param>
+        /// <param name="value">The argument value.</param>
         public void Add(string argument, ArrayList value)
         {
             var sb = new StringBuilder();
@@ -351,12 +474,21 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             this.NoteRequests.Add(sb.ToString());
         }
 
+        /// <summary>
+        /// Removes all elements from the <see cref="JsonObject"/>.
+        /// </summary>
         public void Clear()
             => this.NoteRequests.Clear();
 
+        /// <summary>
+        /// Gets the number of elements contained in the <see cref="JsonObject"/>.
+        /// </summary>
         public int Count
             => this.NoteRequests.Count;
 
+        /// <summary>
+        /// Returns a string that represents the <see cref="JsonObject"/>.
+        /// </summary>
         public virtual string ToJson()
         {
             var sb = new StringBuilder();
@@ -377,14 +509,35 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         }
     }
 
+    /// <summary>
+    /// Contains extension methods for <see cref="string"/> object.
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// Determines whether the beginning of this string instance matches the specified string.
+        /// </summary>
+        /// <param name="source">The source string.</param>
+        /// <param name="value">The string to compare.</param>
+        /// <returns><c>true</c> if value matches the beginning of this string; otherwise, <c>false.</c></returns>
         public static bool StartsWith(this string source, string value)
             => source.ToLower().IndexOf(value.ToLower()) == 0;
 
+        /// <summary>
+        /// Determines whether the end of this string instance matches the specified string.
+        /// </summary>
+        /// <param name="source">The source string.</param>
+        /// <param name="value">The string to compare.</param>
+        /// <returns><c>true</c> if value matches the beginning of this string; otherwise, <c>false.</c></returns>
         public static bool EndsWith(this string source, string value)
             => source.ToLower().IndexOf(value.ToLower()) == source.Length - value.Length;
 
+        /// <summary>
+        /// Returns a value indicating whether a specified substring occurs within this string.
+        /// </summary>
+        /// <param name="source">The source string.</param>
+        /// <param name="value">The string to seek.</param>
+        /// <returns><c>true</c> if the value parameter occurs within this string, or if value is the empty string (""); otherwise, <c>false.</c></returns>
         public static bool Contains(this string source, string value)
             => source.ToLower().IndexOf(value.ToLower()) >= 0;
     }
