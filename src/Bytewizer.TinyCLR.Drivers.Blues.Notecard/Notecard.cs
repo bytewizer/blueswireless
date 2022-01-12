@@ -2,11 +2,20 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Collections;
-
-using GHIElectronics.TinyCLR.Devices.I2c;
 using System.Diagnostics;
 
+#if NanoCLR
+
+using System.Device.I2c;
+
+namespace Bytewizer.NanoCLR.Drivers.Blues.Notecard
+
+#else
+
+using GHIElectronics.TinyCLR.Devices.I2c;
+
 namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
+#endif
 {
     /// <summary>
     /// Configures the <see cref="NotecardController"/> to use the I2C bus for communication with the host.
@@ -14,7 +23,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
     public sealed class NotecardController : IDisposable
     {
         const int I2C_ADDRESS = 0x17;
-        const int I2C_DELAY_MS = 1;
+        const int I2C_DELAY_MS = 2;
         const int REQUEST_HEADER_LEN = 2;
         const int POLLING_TIMEOUT_MS = 5000;
         const int POLLING_DELAY_MS = 50;
@@ -26,6 +35,29 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
         private readonly object requestLock = new object();
 
+#if NanoCLR
+
+        public NotecardController(int i2cBus)
+            : this(new I2cConnectionSettings(
+                    i2cBus,
+                    I2C_ADDRESS,
+                    I2cBusSpeed.StandardMode)
+                  )
+        {}
+
+        public NotecardController(I2cConnectionSettings i2cSettings)
+        {          
+            try
+            {       
+                this.i2cDevice = I2cDevice.Create(i2cSettings);
+                this.Reset();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Notecard not responding", ex);
+            }
+        }
+#else
 
         /// <summary>
         /// Initializes a default instance of the <see cref="NotecardController"/> class.
@@ -47,11 +79,9 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="i2cSettings">The i2c controller settings to use.</param>
         public NotecardController(I2cController i2cController, I2cConnectionSettings i2cSettings)
         {
-
-            this.i2cDevice = i2cController.GetDevice(i2cSettings);
-
             try
             {
+                this.i2cDevice = i2cController.GetDevice(i2cSettings);
                 this.Reset();
             }
             catch (Exception ex)
@@ -59,6 +89,8 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 throw new Exception("Notecard not responding", ex);
             }
         }
+
+#endif
 
         /// <summary>
         /// Pro-actively frees resources owned by this instance.
@@ -259,7 +291,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 }
             }
 
-            return $"{new string(str, 0, j).ToLower()}\n";
+            return $"{new string(str, 0, j)}\n";
         }
 
         private void WaitForData(int timeout, out byte bytesAvailable)
@@ -272,8 +304,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
             do
             {
-                var elapsed = (DateTime.UtcNow.Ticks - startTicks) / TimeSpan.TicksPerMillisecond;
-                if (elapsed > timeout)
+                if ((DateTime.UtcNow.Ticks - startTicks) / TimeSpan.TicksPerMillisecond > timeout)
                 {
                     return;
                 }
@@ -354,7 +385,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string DebuggerDisplay
         {
-            get { return $"{{{nameof(IsSuccess)}: {Response}}}";}
+            get { return $"{Response}";}
         }
     }
 
@@ -368,7 +399,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// </summary>
         /// <param name="req">The command name (i.e. 'note.add').</param>
         public JsonRequest(string req)
-            => this.NoteRequests.Add($"\"req\":\"{req}\"");
+            => this.NoteRequests.Add($"\"req\":\"{req.ToLower()}\"");
 
         /// <summary>
         /// Adds a command argument to <see cref="JsonRequest"/> object.
@@ -376,7 +407,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, JsonObject value)
-            => this.NoteRequests.Add($"\"{argument}\":{value.ToJson()}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value.ToJson()}");
 
         /// <summary>
         /// Returns a <see cref="string"/> that represents the <see cref="JsonRequest"/> object.
@@ -398,7 +429,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, string value)
-            => this.NoteRequests.Add($"\"{argument}\":\"{value}\"");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":\"{value}\"");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -406,7 +437,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, int value)
-            => this.NoteRequests.Add($"\"{argument}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -414,7 +445,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, long value)
-            => this.NoteRequests.Add($"\"{argument}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -422,7 +453,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, float value)
-            => this.NoteRequests.Add($"\"{argument}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -430,7 +461,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, double value)
-            => this.NoteRequests.Add($"\"{argument}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -438,7 +469,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, bool value)
-            => this.NoteRequests.Add($"\"{argument}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -449,7 +480,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         {
             var sb = new StringBuilder();
 
-            sb.Append($"\"{argument}\":");
+            sb.Append($"\"{argument.ToLower()}\":");
 
             sb.Append("[");
             for (var i = 0; i < value.Count; i++)
@@ -505,7 +536,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
             }
             sb.Append("}");
 
-            return sb.ToString().ToLower();
+            return sb.ToString();
         }
     }
 

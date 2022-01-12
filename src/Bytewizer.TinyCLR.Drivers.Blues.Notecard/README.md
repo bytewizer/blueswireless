@@ -2,6 +2,10 @@
 
   A TinyCLR library for communicating with the [Blues Wireless Notecard](https://blues.io/) over I²C. This library works on any [GHI Electronics SITCore Microcontroller](https://www.ghielectronics.com), and can be installed from the Nuget Package Manager.
 
+## Getting Started
+
+We encourage users to play with the samples and test programs. See the working [playground](https://github.com/bytewizer/blueswireless/tree/master/playground) for an example of how to use the packages. The [unit tests](https://github.com/bytewizer/blueswireless/tree/master/tests) also includes many working examples.
+
 ## Example Usage
 
 ```CSharp

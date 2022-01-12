@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <authors>Microcompiler</authors>
+    <description>Blues Wireless driver built for NanoCLR IoT devices.</description>
+    <projectUrl>https://github.com/bytewizer/blueswireless.git</projectUrl>
+    <copyright>Bytewizer. All rights reserved.</copyright>
+    <license type="file">LICENSE.md</license>
+    <icon>images\package-logo.png</icon>
+    <tags>nanoframework nanoclr iot blues wireless</tags>
+    <dependencies>
+      <dependency id="nanoFramework.CoreLibrary" version="1.11.7" /> 
+      <dependency id="nanoFramework.System.Device.I2c" version="1.0.2" /> 
+      <dependency id="nanoFramework.System.Text" version="1.1.2" />  
+    </dependencies>
+  </metadata>
+  <files>
+    <file src=".\bin\$configuration$\$id$.dll" target="lib" />
+    <file src=".\bin\$configuration$\$id$.xml" target="lib" />
+    <file src="..\..\LICENSE.md" target="" />
+    <file src="..\..\images\package-logo.png" target="images\" />
+  </files>
+</package>

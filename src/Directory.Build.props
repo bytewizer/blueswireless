@@ -12,10 +12,9 @@
     <RepositoryUrl>https://github.com/bytewizer/blueswireless.git</RepositoryUrl>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>\builds\artifacts</PackageOutputPath>
     <Copyright>Bytewizer. All rights reserved.</Copyright>
-    <NoWarn>$(NoWarn);1591;5101;5128</NoWarn>
+    <NoWarn>$(NoWarn);1591;5101;5128;5101</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />

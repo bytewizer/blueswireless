@@ -1,4 +1,4 @@
-# Blues Wireless for TinyCLR OS
+# Blues Wireless for TinyCLR and NanoCLR OS
 
 [![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues)
 [![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml)
@@ -9,67 +9,34 @@
 
 ![Notecard](/images/notecard.jpg)
 
-## Driver Libraries
+## TinyCLR Driver Libraries
 
 This repository contains libraries for working with [Blues Wireless Notecarrier-AF](https://blues.io) and TinyCLR OS.
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics">Diagnostics Logger</a> 
 
+
+## Blues Wireless Notecarrier-AF with Adafruit Feather ESP32
+
+![Notecard](/images/notecard-esp32.jpg)
+
+## NanoCLR Driver Libraries
+
+This repository contains libraries for working with [Blues Wireless Notecarrier-AF](https://blues.io) and NanoCLR OS.
+* <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.NanoCLR.Drivers.Blues.Notecard">Notecard Driver</a>
+
 ## Nuget Packages
 
-Install release package from [NuGet](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues). Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
+Install release package from [NuGet](https://www.nuget.org/packages?q=bytewizer). Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
 
 ## Requirements
 
-Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS 2.1</a> or higher.  
+Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">NanoFramework NanoCLR OS</a>.  
 
 ## Give a Star! :star:
 
 If you like or are using this project to start your solution, please give it a star. Thanks!
 
-## Getting Started
-
-We encourage users to play with the samples and test programs. See the working [playground](https://github.com/bytewizer/blueswireless/tree/master/playground) for an example of how to use the packages. The [unit tests](https://github.com/bytewizer/blueswireless/tree/master/tests) also includes many working examples.
-
-## Simple Example
-```CSharp
-class Program
-{
-    static void Main()
-    {
-        // Setup I2c bus for Fez Feather
-        var controller = I2cController.FromName(SC20100.I2cBus.I2c1);
-        var notecard = new NotecardController(controller);
-
-        // Set product id with json request (this only needs to be done once)
-        var request1 = new JsonRequest("hub.set");
-        request1.Add("product", "[your-product-uid]"); // replace this with your product uid
-
-        var results1 = notecard.Request(request1);
-        if (results1.IsSuccess)
-        {
-            Debug.WriteLine(results1.Response);
-        }
-
-        // Create a json body object
-        var body = new JsonObject();
-        body.Add("temp", 35.5);
-        body.Add("humid", 56.23);
-
-        // Set note with json request and included the body message
-        var request2 = new JsonRequest("note.add");
-        request2.Add("body", body);
-        request2.Add("sync", true);
-
-        var results2 = notecard.Request(request2);
-
-        if (results2.IsSuccess)
-        {
-            Debug.WriteLine(results2.Response);
-        }
-    }
-}
-```
 ## Continuous Integration
 
 **main** :: This is the branch containing the latest release build. No contributions should be made directly to this branch. The development branch will periodically be merged to the main branch, and be released to [NuGet](https://www.nuget.org/packages?q=bytewizer.tinyclr).
