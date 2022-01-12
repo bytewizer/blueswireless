@@ -62,7 +62,7 @@ jobs:
     - name: Restore NanoCLR project
       working-directory: src
       run: >- 
-        nuget restore Bytewizer.NanoCLR.Drivers.Blues.Notecard.snl
+        nuget restore Bytewizer.NanoCLR.Drivers.Blues.Notecard.sln
 
     - name: Build and pack TinyCLR libraries
       working-directory: src
@@ -75,6 +75,7 @@ jobs:
         -p:VersionSuffix=preview.${{ steps.info.outputs.build }}
         -p:Configuration=${env:CONFIGURATION}
         -p:ContinuousIntegrationBuild=true
+        -p:AssemblyProduct=TinyCLR
 
     - name: Build NanoCLR libraries
       working-directory: src
@@ -87,6 +88,7 @@ jobs:
         -p:VersionSuffix=preview.${{ steps.info.outputs.build }}
         -p:Configuration=${env:CONFIGURATION}
         -p:ContinuousIntegrationBuild=true
+        -p:AssemblyProduct=NanoCLR
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
