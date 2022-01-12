@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Device.I2c;
 
 namespace Bytewizer.NanoCLR.Drivers.Blues.Notecard
-
 #else
 
 using GHIElectronics.TinyCLR.Devices.I2c;
