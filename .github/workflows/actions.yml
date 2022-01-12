@@ -79,7 +79,7 @@ jobs:
     - name: Build NanoCLR libraries
       working-directory: src
       run: >- 
-        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:build -verbosity:${env:VERBOSITY}
+        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -verbosity:${env:VERBOSITY}
         -p:PackageOutputPath=\builds\artifacts
         -p:BuildNumber="${{ steps.info.outputs.build }}"
         -p:Copyright="${{ steps.info.outputs.copyright }}"
