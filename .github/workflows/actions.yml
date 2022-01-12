@@ -47,7 +47,7 @@ jobs:
 
     - uses: microcompiler/install-vsix@main
       with: 
-        packagename: 'nanoframework.nanoFramework-VS2019-Extension'
+        packagename: 'nanoframework.nanoFramework-VS2022-Extension'
 
     - name: Restore TinyCLR project
       working-directory: src
@@ -74,7 +74,7 @@ jobs:
     - name: Build and pack NanoCLR libraries
       working-directory: src
       run: >- 
-        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -verbosity:${env:VERBOSITY}
+        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:build -verbosity:${env:VERBOSITY}
         -p:PackageOutputPath=\builds\artifacts
         -p:BuildNumber="${{ steps.info.outputs.build }}"
         -p:Copyright="${{ steps.info.outputs.copyright }}"
