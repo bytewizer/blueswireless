@@ -43,11 +43,16 @@ jobs:
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.0.2
       with:
-        vs-version: ${{ matrix.vs-version }}       
+        vs-version: ${{ matrix.vs-version }}
+        
+    - name: Setup nuget
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest' 
 
     - uses: microcompiler/install-vsix@main
       with: 
-        packagename: 'nanoframework.nanoFramework-VS2022-Extension'
+        packagename: 'nanoframework.nanoFramework-VS2019-Extension'
 
     - name: Restore TinyCLR project
       working-directory: src
@@ -71,7 +76,7 @@ jobs:
         -p:Configuration=${env:CONFIGURATION}
         -p:ContinuousIntegrationBuild=true
 
-    - name: Build and pack NanoCLR libraries
+    - name: Build NanoCLR libraries
       working-directory: src
       run: >- 
         msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:build -verbosity:${env:VERBOSITY}
@@ -88,11 +93,6 @@ jobs:
       with:
         name: Build Packages ${{ steps.info.outputs.build }} 
         path: \builds\artifacts
-
-    - name: Setup nuget
-      uses: nuget/setup-nuget@v1
-      with:
-        nuget-version: 'latest' 
     
     - name: Publish package to github.com
       run: |
