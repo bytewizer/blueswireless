@@ -57,12 +57,12 @@ jobs:
     - name: Restore TinyCLR project
       working-directory: src
       run: >- 
-        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard. -t:restore -verbosity:${env:VERBOSITY} 
+        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard -t:restore -verbosity:${env:VERBOSITY} 
     
     - name: Restore NanoCLR project
       working-directory: src
       run: >- 
-        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:restore -verbosity:${env:VERBOSITY} 
+        nuget restore Bytewizer.NanoCLR.Drivers.Blues.Notecard.snl
 
     - name: Build and pack TinyCLR libraries
       working-directory: src
