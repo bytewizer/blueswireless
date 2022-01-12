@@ -20,6 +20,7 @@
     <file src=".\bin\$configuration$\$id$.dll" target="lib" />
     <file src=".\bin\$configuration$\$id$.xml" target="lib" />
     <file src=".\bin\$configuration$\$id$.pe" target="lib" />
+    <file src=".\bin\$configuration$\$id$.pdbx" target="lib" />
     <file src="..\..\LICENSE.md" target="" />
     <file src="..\..\images\package-logo.png" target="images\" />
   </files>
