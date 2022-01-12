@@ -44,7 +44,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
       with:
         vs-version: ${{ matrix.vs-version }}       
-    
+
+    - uses: microcompiler/install-vsix@main
+      with: 
+        packagename: 'nanoframework.nanoFramework-VS2019-Extension'
+
     - name: Restore TinyCLR project
       working-directory: src
       run: >- 
