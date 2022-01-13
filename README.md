@@ -9,9 +9,9 @@
 
 ![Notecard](/images/notecard.jpg)
 
-## TinyCLR Driver Libraries
+### TinyCLR Driver Libraries
 
-This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and TinyCLR OS.
+This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and [TinyCLR OS](https://www.ghielectronics.com).
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics">Diagnostics Logger</a> 
 
@@ -20,9 +20,9 @@ This repository contains libraries for working with [Blues Wireless Notecard](ht
 
 ![Notecard](/images/notecard-esp32.jpg)
 
-## NanoCLR Driver Libraries
+### NanoCLR Driver Libraries
 
-This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and NanoCLR OS.
+This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and [NanoCLR OS](https://www.nanoFramework.net/).
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.NanoCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 
 ## Give a Star! :star:
