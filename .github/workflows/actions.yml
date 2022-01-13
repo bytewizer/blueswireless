@@ -57,7 +57,7 @@ jobs:
     - name: Restore TinyCLR project
       working-directory: src
       run: >- 
-        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard -t:restore -verbosity:${env:VERBOSITY} 
+        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard.sln -t:restore -verbosity:${env:VERBOSITY} 
     
     - name: Restore NanoCLR project
       working-directory: src
@@ -67,7 +67,7 @@ jobs:
     - name: Build and pack TinyCLR libraries
       working-directory: src
       run: >- 
-        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard -t:pack -verbosity:${env:VERBOSITY}
+        msbuild Bytewizer.TinyCLR.Drivers.Blues.Notecard.sln -t:pack -verbosity:${env:VERBOSITY}
         -p:PackageOutputPath=\builds\artifacts
         -p:BuildNumber="${{ steps.info.outputs.build }}"
         -p:Copyright="${{ steps.info.outputs.copyright }}"
@@ -79,7 +79,7 @@ jobs:
     - name: Build NanoCLR libraries
       working-directory: src
       run: >- 
-        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:pack -verbosity:${env:VERBOSITY}
+        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard.sln -t:pack -verbosity:${env:VERBOSITY}
         -p:PackageOutputPath=\builds\artifacts
         -p:BuildNumber="${{ steps.info.outputs.build }}"
         -p:Copyright="${{ steps.info.outputs.copyright }}"
