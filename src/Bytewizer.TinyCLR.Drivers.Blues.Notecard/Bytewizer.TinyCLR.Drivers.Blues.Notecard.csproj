@@ -16,6 +16,7 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup>
+    <AssemblyProduct>TinyCLR</AssemblyProduct>
     <Description>Blues Wireless driver built for TinyCLR IoT devices.</Description>
     <PackageTags>ghi tinyclr tinyclros sitcore iot blues wireless</PackageTags>
   </PropertyGroup>

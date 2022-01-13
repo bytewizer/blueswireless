@@ -75,12 +75,11 @@ jobs:
         -p:VersionSuffix=preview.${{ steps.info.outputs.build }}
         -p:Configuration=${env:CONFIGURATION}
         -p:ContinuousIntegrationBuild=true
-        -p:AssemblyProduct=TinyCLR
 
     - name: Build NanoCLR libraries
       working-directory: src
       run: >- 
-        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -verbosity:${env:VERBOSITY}
+        msbuild Bytewizer.NanoCLR.Drivers.Blues.Notecard -t:pack -verbosity:${env:VERBOSITY}
         -p:PackageOutputPath=\builds\artifacts
         -p:BuildNumber="${{ steps.info.outputs.build }}"
         -p:Copyright="${{ steps.info.outputs.copyright }}"
@@ -88,7 +87,6 @@ jobs:
         -p:VersionSuffix=preview.${{ steps.info.outputs.build }}
         -p:Configuration=${env:CONFIGURATION}
         -p:ContinuousIntegrationBuild=true
-        -p:AssemblyProduct=NanoCLR
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2

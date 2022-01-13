@@ -11,7 +11,7 @@
 
 ## TinyCLR Driver Libraries
 
-This repository contains libraries for working with [Blues Wireless Notecarrier-AF](https://blues.io) and TinyCLR OS.
+This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and TinyCLR OS.
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.TinyCLR.Drivers.Blues.Notecard.Diagnostics">Diagnostics Logger</a> 
 
@@ -22,20 +22,20 @@ This repository contains libraries for working with [Blues Wireless Notecarrier-
 
 ## NanoCLR Driver Libraries
 
-This repository contains libraries for working with [Blues Wireless Notecarrier-AF](https://blues.io) and NanoCLR OS.
+This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and NanoCLR OS.
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.NanoCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 
-## Nuget Packages
+## Give a Star! :star:
 
-Install release package from [NuGet](https://www.nuget.org/packages?q=bytewizer). Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
+If you like or are using this project to start your solution, please give it a star. Thanks!
 
 ## Requirements
 
 Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">NanoFramework NanoCLR OS</a>.  
 
-## Give a Star! :star:
+## Nuget Packages
 
-If you like or are using this project to start your solution, please give it a star. Thanks!
+Install releases package from [NuGet](https://www.nuget.org/packages?q=bytewizer). Development build packages are available as [Github Packages](https://github.com/bytewizer?tab=packages).
 
 ## Continuous Integration
 

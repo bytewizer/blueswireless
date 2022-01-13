@@ -15,6 +15,11 @@ Update the firmware of an ESP32 target connected to COM7.
 ```Shell
 nanoff --serialport COM7 --update
 ```
+Install packages from [NuGet](https://www.nuget.org/packagesq=bytewizer.nanoclr) using the Package Manager Console :
+```powershell
+PM> Install-Package NanoFramework.Hardware.Esp32
+PM> Install-Package Bytewizer.NanoCLR.Drivers.Blues.Notecard
+```
 
 ### Simple Example
 ```CSharp

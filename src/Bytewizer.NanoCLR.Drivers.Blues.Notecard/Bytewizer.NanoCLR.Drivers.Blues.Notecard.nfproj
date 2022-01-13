@@ -18,8 +18,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>NanoCLR</DefineConstants>
+    <AssemblyProduct>NanoCLR</AssemblyProduct>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).xml</DocumentationFile>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
@@ -54,7 +54,7 @@
       <ProjectConfigurationsDeclaredAsItems />
     </ProjectCapabilities>
   </ProjectExtensions>
-  <Target Name="AfterBuild" Condition=" '$(GeneratePackageOnBuild)' == 'True' ">
+  <Target Name="Pack"  DependsOnTargets="Build;">
     <PropertyGroup>
       <NuGetExePath Condition="'$(NuGetExePath)' == ''">nuget.exe</NuGetExePath>
       <NuspecPath>$([System.IO.Path]::Combine($(BaseDir), "$(ProjectName).nuspec"))</NuspecPath>
