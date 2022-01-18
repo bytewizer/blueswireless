@@ -1,4 +1,4 @@
-# Blues Wireless for TinyCLR and NanoCLR OS
+# Blues Wireless for TinyCLR and .NET nanoFramework
 
 [![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues)
 [![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml)
@@ -20,9 +20,9 @@ This repository contains libraries for working with [Blues Wireless Notecard](ht
 
 ![Notecard](/images/notecard-esp32.jpg)
 
-### NanoCLR Driver Libraries
+### .NET nanoFramework Driver Libraries
 
-This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and [NanoCLR OS](https://www.nanoFramework.net/).
+This repository contains libraries for working with [Blues Wireless Notecard](https://blues.io) and [.NET nanoFramework](https://www.nanoFramework.net/).
 * <a href="https://github.com/bytewizer/blueswireless/tree/develop/src/Bytewizer.NanoCLR.Drivers.Blues.Notecard">Notecard Driver</a>
 
 ## Give a Star! :star:
