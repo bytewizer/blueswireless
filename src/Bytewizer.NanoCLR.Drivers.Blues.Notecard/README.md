@@ -1,7 +1,7 @@
 # Blues Wireless for .NET nanoFramework
 
 ## Getting Started
-This <a href="https://www.nanoframework.net/">getting started guide</a> will walk you through the setup of your development machine. Here are the basic steps required to get you started.
+This <a href="https://docs.nanoframework.net/content/getting-started-guides/getting-started-managed.html">getting started guide</a> will walk you through the setup of your development machine. Here are the basic steps required to get you started.
 
 ### Install the .NET nanoFramework extension for Visual Studio
 Launch Visual Studio and install the .NET nanoFramework [extension](https://marketplace.visualstudio.com/items?itemName=nanoframework.nanoFramework-VS2022-Extension).

@@ -36,6 +36,10 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
 #if NanoCLR
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotecardController"/> class.
+        /// </summary>
+        /// <param name="i2cBus">The i2c bus to use.</param>
         public NotecardController(int i2cBus)
             : this(new I2cConnectionSettings(
                     i2cBus,
@@ -44,6 +48,10 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                   )
         {}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotecardController"/> class.
+        /// </summary>
+        /// <param name="i2cSettings">The i2c settings to use.</param>
         public NotecardController(I2cConnectionSettings i2cSettings)
         {          
             try
@@ -59,7 +67,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 #else
 
         /// <summary>
-        /// Initializes a default instance of the <see cref="NotecardController"/> class.
+        /// Initializes a new instance of the <see cref="NotecardController"/> class.
         /// </summary>
         /// <param name="i2cController">The i2c controller to use.</param>
         public NotecardController(I2cController i2cController)
@@ -163,7 +171,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 var requestBytes = Encoding.UTF8.GetBytes(json);
 
                 // Write request
-                this.i2cDevice.WriteJoinBytes(new byte[] { (byte)json.Length }, requestBytes);
+                this.i2cDevice.WriteJoinBytes((byte)json.Length, requestBytes);
 
                 // Notecard i2c commands can not be received more quickly then 1 ms appart.
                 Thread.Sleep(I2C_DELAY_MS);
@@ -295,7 +303,6 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
         private void WaitForData(int timeout, out byte bytesAvailable)
         {
-
             var startTicks = DateTime.UtcNow.Ticks;
 
             pollBuffer[0] = 0;
@@ -321,7 +328,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
     }
 
     /// <summary>
-    ///  Represents a response from the notecard.
+    /// Represents a response from the notecard.
     /// </summary>
     [DebuggerDisplay("{DebuggerDisplay, nq}")]
     public class RequestResults
@@ -378,13 +385,13 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <value>The json response message.</value>
         public string Response { get; private set; }
 
-        ///	<summary>
-        ///	Debugger display for this object.
-        ///	</summary>
+        /// <summary>
+        /// Debugger display for this object.
+        /// </summary>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string DebuggerDisplay
         {
-            get { return $"{Response}";}
+            get { return $"{Response}"; }
         }
     }
 
@@ -468,7 +475,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
         /// <param name="argument">The argument name.</param>
         /// <param name="value">The argument value.</param>
         public void Add(string argument, bool value)
-            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value}");
+            => this.NoteRequests.Add($"\"{argument.ToLower()}\":{value.ToString().ToLower()}");
 
         /// <summary>
         /// Adds an argument and value to the <see cref="JsonObject"/>.
@@ -582,12 +589,12 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
 
     internal static class I2cExtensions
     {
-        internal static void WriteJoinBytes(this I2cDevice device, byte[] first, byte[] second)
+        internal static void WriteJoinBytes(this I2cDevice device, byte first, byte[] second)
         {
-            var buffer = new byte[first.Length + second.Length];
+            var buffer = new byte[second.Length + 1];
 
-            Array.Copy(first, buffer, first.Length);
-            Array.Copy(second, 0, buffer, first.Length, second.Length);
+            buffer[0] = first;
+            Array.Copy(second, 0, buffer, 1, second.Length);
 
             device.Write(buffer);
         }

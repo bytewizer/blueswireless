@@ -1,4 +1,4 @@
-# Blues Wireless for TinyCLR and .NET nanoFramework
+# Blues Wireless for TinyCLR OS and .NET nanoFramework
 
 [![NuGet Status](http://img.shields.io/nuget/v/Bytewizer.TinyCLR.Drivers.Blues.Notecard.svg?style=flat&logo=nuget)](https://www.nuget.org/packages?q=bytewizer.tinyclr.drivers.blues)
 [![Release](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml/badge.svg)](https://github.com/bytewizer/blueswireless/actions/workflows/release.yml)
@@ -31,7 +31,7 @@ If you like or are using this project to start your solution, please give it a s
 
 ## Requirements
 
-Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">NanoFramework NanoCLR OS</a>.  
+Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">.Net nanoFramework OS</a>.  
 
 ## Nuget Packages
 

@@ -107,6 +107,23 @@ namespace Bytewizer.TinyCLR.Tests.Notecard
             Assert.True(results.IsSuccess);
         }
 
+        public void RequestWithTightLoop()
+        {
+            var request = new JsonRequest("card.random");
+
+            int count = 0;
+            for (int x = 0; x < 100; x++)
+            {
+                var results = _notecard.Request(request);
+                if (results.IsSuccess)
+                {
+                    count++;
+                }
+            }
+
+            Assert.AreEqual(count, 100);
+        }
+
         public void EnsureSuccess()
         {
             Assert.Throws(typeof(Exception), () =>
