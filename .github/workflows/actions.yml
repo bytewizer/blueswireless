@@ -52,7 +52,7 @@ jobs:
 
     - uses: microcompiler/install-vsix@main
       with: 
-        packagename: 'nanoframework.nanoFramework-VS2022-Extension'
+        packagename: 'nanoframework.nanoFramework-VS2019-Extension'
 
     - name: Restore TinyCLR project
       working-directory: src
