@@ -31,7 +31,7 @@ If you like or are using this project to start your solution, please give it a s
 
 ## Requirements
 
-Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">.Net nanoFramework OS</a>.  
+Software: <a href="https://visualstudio.microsoft.com/downloads/">Visual Studio 2019/2022</a> and <a href="https://www.ghielectronics.com/">GHI Electronics TinyCLR OS</a> or <a href="https://www.nanoFramework.net/">.NET nanoFramework OS</a>.  
 
 ## Nuget Packages
 

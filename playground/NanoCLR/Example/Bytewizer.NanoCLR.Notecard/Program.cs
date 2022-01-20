@@ -18,7 +18,7 @@ namespace Bytewizer.NanoCLR.Notecard
             // Create notecard controller I2cBus1 for Feather
             var notecard = new NotecardController(1);
 
-            var request = new JsonRequest("card.random");
+            var request = new JsonRequest("card.voltage");
             for (int x = 0; x < 100; x++)
             {
                 var results = notecard.Request(request);

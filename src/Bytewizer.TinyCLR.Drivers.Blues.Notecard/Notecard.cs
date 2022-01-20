@@ -298,7 +298,7 @@ namespace Bytewizer.TinyCLR.Drivers.Blues.Notecard
                 }
             }
 
-            return $"{new string(str, 0, j)}\n";
+            return new string(str, 0, j) + '\n';
         }
 
         private void WaitForData(int timeout, out byte bytesAvailable)
