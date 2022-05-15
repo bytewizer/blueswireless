@@ -10,6 +10,7 @@ env:
   VERBOSITY:  'Normal'
   CONFIGURATION: 'Release'
   ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+  GITHUB_TOKEN: ${{ github.token }}
   
 jobs:
   Release:
@@ -50,9 +51,8 @@ jobs:
       with:
         nuget-version: 'latest' 
 
-    - uses: microcompiler/install-vsix@main
-      with: 
-        packagename: 'nanoframework.nanoFramework-VS2019-Extension'
+    - name: Setup nanoFramework
+      uses: nanoframework/nanobuild@v1
 
     - name: Restore TinyCLR project
       working-directory: src
