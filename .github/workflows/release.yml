@@ -44,7 +44,9 @@ jobs:
         echo "release.prerelease  = ${{ github.event.release.prerelease }}"
     
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.1     
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64     
     
     - name: Setup nuget
       uses: nuget/setup-nuget@v1
